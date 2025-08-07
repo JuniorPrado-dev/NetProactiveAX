@@ -1,2 +1,2 @@
 # To run local
-uv 
+uv run fastapi dev

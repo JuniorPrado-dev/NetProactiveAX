@@ -1,0 +1,2 @@
+# To run local
+uv 

@@ -1,33 +1,14 @@
 FROM python:3.12-slim
 
-WORKDIR /app
-
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONPATH="/"
-
+# Install uv.
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-COPY pyproject.toml .
-COPY uv.lock .
+# Copy the application into the container.
+COPY . /app
 
-
+# Install the application dependencies.
+WORKDIR /app
 RUN uv sync --frozen --no-cache
-RUN uv export --no-dev --no-hashes -o requirements.txt
 
-RUN pip install --no-cache-dir --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
-
-RUN rm pyproject.toml uv.lock requirements.txt
-
-ENV PATH="/root/.local/bin:$PATH"
-
-COPY alembic.ini .
-COPY alembic ./alembic
-
-COPY main.py .
-
-COPY app ./app
-
-EXPOSE 5000
-
-CMD ["python", "main.py"]
+# Run the application.
+CMD ["/app/.venv/bin/fastapi", "run", "app/main.py", "--port", "80", "--host", "0.0.0.0"]

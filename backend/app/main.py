@@ -6,10 +6,9 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
-
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "API is working!..."}
 
 async def main():
     # Configura o servidor UVicorn para rodar em um event loop separado

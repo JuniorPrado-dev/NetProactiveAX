@@ -1,10 +1,11 @@
 import asyncio
-
 import uvicorn
-
 from fastapi import FastAPI
+from app.api.v1.routes.genieacs import router as genie_routers
 
 app = FastAPI()
+
+app.include_router(genie_routers)
 
 @app.get("/")
 async def root():

@@ -52,3 +52,54 @@ class Genie:
                     status_code=502,
                     detail=f"Falha ao conectar ao serviço externo: {e}"
                 )
+
+    @staticmethod
+    async def get_all_faults():
+        async with httpx.AsyncClient() as client:
+            try:
+                response = await client.get(f"{BASE_URL_GENIE}/faults")
+                response.raise_for_status()
+                return response.json()
+
+            except httpx.HTTPStatusError as e:
+                raise HTTPException(
+                    status_code=e.response.status_code,
+                    detail=f"Erro ao buscar falhas: {e.response.text}"
+                )
+            except httpx.RequestError as e:
+                raise HTTPException(
+                    status_code=502,
+                    detail=f"Falha ao conectar ao serviço externo: {e}"
+                )
+    
+    @staticmethod
+    async def get_fault_by_mac(mac_address: str):
+        # encontra dispositivo pelo mac
+        device = await Genie.get_device_by_mac(mac_address = mac_address)
+
+        if (not device):
+            raise HTTPException(status_code=404, detail="Relatório  de erro não encontrado")
+        
+        device_id = device.get("_id")
+
+        if (device_id is None):
+            raise HTTPException(status_code=404, detail="Relatório  de erro não encontrado")
+        
+        async with httpx.AsyncClient() as client:
+            try:
+                response = await client.get(f"{BASE_URL_GENIE}/faults")
+                response.raise_for_status()
+                faults = [device for device in response if device.get("device") == device_id]
+                return faults.json()
+            except httpx.HTTPStatusError as e:
+                if e.response.status_code == 404:
+                    raise HTTPException(status_code=404, detail="Dispositivo não encontrado")
+                raise HTTPException(
+                    status_code=e.response.status_code,
+                    detail=f"Erro ao buscar dispositivo: {e.response.text}"
+                )
+            except httpx.RequestError as e:
+                raise HTTPException(
+                    status_code=502,
+                    detail=f"Falha ao conectar ao serviço externo: {e}"
+                )

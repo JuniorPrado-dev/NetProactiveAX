@@ -4,11 +4,11 @@ tags_metadata = [
         "description": "Testa se a API está ativa",
     },
     {
-        "name": "Todos os dispositivos",
-        "description": "Retorna informações de todos os dispositivos conectados os Genie",
+        "name": "GENIE",
+        "description": "Retorna informaões provenientes do GENIE",
     },
     {
-        "name": "Dispositivo por MAC",
-        "description": "Retorna informações de um disposivo específico. Para isso informe o endereço MAC do dispositivo ao final da url.",
-    },
+        "name": "VOALE",
+        "description": "Retorna informaões provenientes do VOALE",
+    }
 ]

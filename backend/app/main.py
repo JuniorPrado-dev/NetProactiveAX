@@ -1,12 +1,14 @@
 import asyncio
-
 import uvicorn
-
 from fastapi import FastAPI
+from app.constants.metadata import tags_metadata
+from app.api.v1.routes.genieacs import router as genie_routers
 
-app = FastAPI()
+app = FastAPI(openapi_tags=tags_metadata)
 
-@app.get("/")
+app.include_router(genie_routers)
+
+@app.get("/",tags=["Teste API"])
 async def root():
     return {"message": "API is working!..."}
 

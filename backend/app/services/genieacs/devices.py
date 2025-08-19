@@ -1,7 +1,8 @@
 import httpx
 import json
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from app.constants.urls import BASE_URL_GENIE
+from app.models.device import device_serializer
 
 
 class Genie:
@@ -9,9 +10,12 @@ class Genie:
     async def get_all_devices():
         async with httpx.AsyncClient() as client:
             try:
-                response = await client.get(f"{BASE_URL_GENIE}/devices")
-                response.raise_for_status()
-                return response.json()
+                resp = await client.get(f"{BASE_URL_GENIE}/devices")
+                resp.raise_for_status()
+                all_devices = resp.json()
+                all_devices = [device_serializer(device) for device in all_devices ]
+
+                return all_devices
 
             except httpx.HTTPStatusError as e:
                 raise HTTPException(
@@ -35,10 +39,13 @@ class Genie:
         }
 
         async with httpx.AsyncClient() as client:
+            
             try:
-                response = await client.get(f"{BASE_URL_GENIE}/devices", params=params)
-                response.raise_for_status()
-                return response.json()
+                resp = await client.get(f"{BASE_URL_GENIE}/devices", params=params)
+                resp.raise_for_status()
+                device = resp.json()
+                device =device_serializer(device[0])
+                return device
 
             except httpx.HTTPStatusError as e:
                 if e.response.status_code == 404:
@@ -47,6 +54,7 @@ class Genie:
                     status_code=e.response.status_code,
                     detail=f"Erro ao buscar dispositivo: {e.response.text}"
                 )
+            
             except httpx.RequestError as e:
                 raise HTTPException(
                     status_code=502,

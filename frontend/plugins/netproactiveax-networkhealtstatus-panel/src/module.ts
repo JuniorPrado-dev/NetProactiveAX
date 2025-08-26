@@ -3,7 +3,16 @@ import { SimpleOptions } from './types';
 import { SimplePanel } from './components/SimplePanel';
 
 export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOptions((builder) => {
-  // Esta seção fica intencionalmente vazia porque o nosso painel não tem opções configuráveis.
-  // O código de exemplo que causava o erro foi removido.
-  return builder;
+  return builder.addSelect({
+    path: 'panelMode',
+    name: 'Tipo de Análise',
+    description: 'Selecione o modo de visualização do painel.',
+    defaultValue: 'health',
+    settings: {
+      options: [
+        { value: 'health', label: 'Análise de Saúde' },
+        { value: 'churn', label: 'Análise de Risco de Evasão' },
+      ],
+    },
+  });
 });

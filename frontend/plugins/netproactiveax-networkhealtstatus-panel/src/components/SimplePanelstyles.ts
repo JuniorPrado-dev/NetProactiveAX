@@ -104,4 +104,44 @@ export const getStyles = (theme: GrafanaTheme2) => ({
     overflow: hidden;
     text-overflow: ellipsis;
   `,
+  progressBarContainer: css`
+    flex: 1 1 30%;
+    background-color: ${theme.colors.background.secondary};
+    border-radius: ${theme.shape.borderRadius()};
+    height: 20px;
+    margin: 0 ${theme.spacing(1)};
+  `,
+  progressBar: css`
+    height: 100%;
+    border-radius: ${theme.shape.borderRadius()};
+    color: ${theme.colors.primary.contrastText};
+    font-size: ${theme.typography.size.sm};
+    font-weight: ${theme.typography.fontWeightBold};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: width 0.5s ease-in-out;
+  `,
+  riskHigh: css`
+    background-color: ${theme.colors.error.main};
+  `,
+  riskMedium: css`
+    background-color: ${theme.colors.warning.main};
+  `,
+  riskLow: css`
+    background-color: ${theme.colors.success.main};
+  `,
+  keyFactorsContainer: css`
+    flex: 1 1 40%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: ${theme.spacing(0.5)};
+  `,
+  keyFactorTag: css`
+    background-color: ${theme.colors.background.secondary};
+    color: ${theme.colors.text.secondary};
+    padding: ${theme.spacing(0.25, 1)};
+    border-radius: ${theme.shape.borderRadius()};
+    font-size: ${theme.typography.size.sm};
+  `,
 });

@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 import datetime
 
 app = Flask(__name__)
-
+# --- Funções de Dados Fictícios ---
 # Dados Fictícios para o Painel de Saúde da Rede
 def get_health_status_data():
     return [
@@ -49,7 +49,8 @@ def get_health_status_data():
             "recommendation": "Nenhuma ação necessária.",
             "lastCheck": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "detailsLink": "/d/dashboard-detalhado?orgId=1&var-customer=cliente-004"
-        }
+        },
+        # Adicione mais clientes aqui se necessário
     ]
 
 # Dados Fictícios para o Painel de Risco de Churn
@@ -78,14 +79,21 @@ def get_churn_risk_data():
             "riskLevel": "Baixo",
             "keyFactors": ["Uso consistente", "Feedback positivo no último contato"],
             "detailsLink": "/d/dashboard-detalhado?orgId=1&var-customer=cliente-050"
-        }
+        },
+        # Adicione mais clientes aqui se necessário
     ]
+
+# --- Endpoints da API ---
+# Endpoint padrão
+@app.route('/')
+def index():
+    return jsonify({"status": "ok", "message": "API Mock do Grafana está no ar!"})
 
 # Endpoint para o Painel 1
 @app.route('/api/health-status')
 def health_status():
     data = get_health_status_data()
-    # A API já retorna os dados ordenados por statusCode, do maior para o menor.
+    # Ordena os dados por statusCode, do maior para o menor (mais grave primeiro).
     sorted_data = sorted(data, key=lambda x: x['statusCode'], reverse=True)
     return jsonify(sorted_data)
 
@@ -93,7 +101,7 @@ def health_status():
 @app.route('/api/churn-risk')
 def churn_risk():
     data = get_churn_risk_data()
-    # Ordenado por score de risco, do maior para o menor.
+    # Ordena por score de risco, do maior para o menor.
     sorted_data = sorted(data, key=lambda x: x['churnRiskScore'], reverse=True)
     return jsonify(sorted_data)
 

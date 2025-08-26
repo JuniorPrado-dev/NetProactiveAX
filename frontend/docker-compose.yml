@@ -7,10 +7,10 @@ services:
     container_name: node_dev
     working_dir: /usr/src/app
     volumes:
-      - ./frontend:/usr/src/app
+      - ./plugins:/usr/src/app
     command: tail -f /dev/null
 
   grafana:
     extends:
-      file: .frontend/netproactriveax-netwoorkhealtstatus-panel/config/docker-compose-base.yaml
+      file: ./plugins/netproactiveax-networkhealtstatus-panel/.config/docker-compose-base.yaml
       service: grafana

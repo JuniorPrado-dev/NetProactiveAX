@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   api:
     container_name: netProactiveAX-api
@@ -5,8 +7,24 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     restart: always
+    depends_on:
+      - mongodb
     ports:
-      - "5000:80"
+      - "${API_PORT}:${API_DOCKER_PORT}"
+    env_file:
+      - .env
 
-# volumes:
-#   db_volume:
+  mongodb:
+    build:
+      context: ./mongo
+      dockerfile: Dockerfile
+    container_name: mongodb
+    ports:
+      - "27018:27017"
+    env_file:
+      - .env
+    volumes:
+      - mongo_data:/data/db
+ 
+volumes:
+  mongo_data:
